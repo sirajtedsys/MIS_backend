@@ -1,0 +1,57 @@
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\appsettings.Development.json
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\appsettings.json
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\MIS Backend.exe
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\MIS Backend.deps.json
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\MIS Backend.runtimeconfig.json
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\MIS Backend.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\MIS Backend.pdb
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Microsoft.OpenApi.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Newtonsoft.Json.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Oracle.EntityFrameworkCore.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Oracle.ManagedDataAccess.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\System.Configuration.ConfigurationManager.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\System.Diagnostics.PerformanceCounter.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\System.DirectoryServices.Protocols.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Diagnostics.PerformanceCounter.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\runtimes\linux\lib\net8.0\System.DirectoryServices.Protocols.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\runtimes\osx\lib\net8.0\System.DirectoryServices.Protocols.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.DirectoryServices.Protocols.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\MIS Backend.csproj.AssemblyReference.cache
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\MIS Backend.GeneratedMSBuildEditorConfig.editorconfig
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\MIS Backend.AssemblyInfoInputs.cache
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\MIS Backend.AssemblyInfo.cs
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\MIS Backend.csproj.CoreCompileInputs.cache
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\MIS Backend.MvcApplicationPartsAssemblyInfo.cs
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\MIS Backend.MvcApplicationPartsAssemblyInfo.cache
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\staticwebassets.build.json
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\staticwebassets.development.json
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\staticwebassets\msbuild.MIS Backend.Microsoft.AspNetCore.StaticWebAssets.props
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\staticwebassets\msbuild.build.MIS Backend.props
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.MIS Backend.props
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.MIS Backend.props
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\staticwebassets.pack.json
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\scopedcss\bundle\MIS Backend.styles.css
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\MIS Back.13AA1B9E.Up2Date
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\MIS Backend.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\refint\MIS Backend.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\MIS Backend.pdb
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\MIS Backend.genruntimeconfig.cache
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Debug\net8.0\ref\MIS Backend.dll
