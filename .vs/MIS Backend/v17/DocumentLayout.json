@@ -7,6 +7,18 @@
       "RelativeMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|solutionrelative:mis backend\\repositry\\commonrepositry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|d:\\working\\siraj\\mis project\\source codes\\mis backend\\mis backend\\controllers\\commoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|solutionrelative:mis backend\\controllers\\commoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|d:\\working\\siraj\\mis project\\source codes\\mis backend\\mis backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|solutionrelative:mis backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|d:\\working\\siraj\\mis project\\source codes\\mis backend\\mis backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|solutionrelative:mis backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|d:\\working\\siraj\\mis project\\source codes\\mis backend\\mis backend\\data\\dbmodel\\uchmaster_loginsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|solutionrelative:mis backend\\data\\dbmodel\\uchmaster_loginsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -18,24 +30,12 @@
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\inetpub\\wwwroot\\mis\\Backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|d:\\working\\siraj\\mis project\\source codes\\mis backend\\mis backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|solutionrelative:mis backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|d:\\working\\siraj\\mis project\\source codes\\mis backend\\mis backend\\data\\class\\jwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|solutionrelative:mis backend\\data\\class\\jwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|d:\\working\\siraj\\mis project\\source codes\\mis backend\\mis backend\\mis backend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|solutionrelative:mis backend\\mis backend.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|d:\\working\\siraj\\mis project\\source codes\\mis backend\\mis backend\\controllers\\commoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|solutionrelative:mis backend\\controllers\\commoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|d:\\working\\siraj\\mis project\\source codes\\mis backend\\mis backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|solutionrelative:mis backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{112E87D0-287C-4021-812E-0F4FA3A9A007}|MIS Backend\\MIS Backend.csproj|d:\\working\\siraj\\mis project\\source codes\\mis backend\\mis backend\\data\\dbmodel\\uchmaster_hrm_branch.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -73,14 +73,13 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\inetpub\\wwwroot\\mis\\Backend\\appsettings.json",
               "ToolTip": "C:\\inetpub\\wwwroot\\mis\\Backend\\appsettings.json",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-09-17T05:21:45.248Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-17T05:21:45.248Z"
             },
             {
               "$type": "Document",
@@ -121,7 +120,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "UCHMASTER_LoginSettings.cs",
               "DocumentMoniker": "D:\\WORKING\\siraj\\mis project\\source codes\\MIS Backend\\MIS Backend\\Data\\DbModel\\UCHMASTER_LoginSettings.cs",
               "RelativeDocumentMoniker": "MIS Backend\\Data\\DbModel\\UCHMASTER_LoginSettings.cs",
@@ -134,7 +133,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "JwtService.cs",
               "DocumentMoniker": "D:\\WORKING\\siraj\\mis project\\source codes\\MIS Backend\\MIS Backend\\Data\\Class\\JwtService.cs",
               "RelativeDocumentMoniker": "MIS Backend\\Data\\Class\\JwtService.cs",
@@ -179,20 +178,20 @@
               "RelativeDocumentMoniker": "MIS Backend\\Repositry\\CommonRepositry.cs",
               "ToolTip": "D:\\WORKING\\siraj\\mis project\\source codes\\MIS Backend\\MIS Backend\\Repositry\\CommonRepositry.cs",
               "RelativeToolTip": "MIS Backend\\Repositry\\CommonRepositry.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAABoAAAAMAAAA",
+              "ViewState": "AQIAAHkDAAAAAAAAAAAYwIIDAAAuAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-05T05:47:29.86Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 1,
               "Title": "CommonController.cs",
               "DocumentMoniker": "D:\\WORKING\\siraj\\mis project\\source codes\\MIS Backend\\MIS Backend\\Controllers\\CommonController.cs",
               "RelativeDocumentMoniker": "MIS Backend\\Controllers\\CommonController.cs",
               "ToolTip": "D:\\WORKING\\siraj\\mis project\\source codes\\MIS Backend\\MIS Backend\\Controllers\\CommonController.cs",
               "RelativeToolTip": "MIS Backend\\Controllers\\CommonController.cs",
-              "ViewState": "AQIAAFcAAAAAAAAAAAAxwOcAAAArAAAA",
+              "ViewState": "AQIAAPsBAAAAAAAAAAAjwAICAAA8AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-05T05:46:23.474Z",
               "EditorCaption": ""
@@ -212,19 +211,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\WORKING\\siraj\\mis project\\source codes\\MIS Backend\\MIS Backend\\Program.cs",
               "RelativeDocumentMoniker": "MIS Backend\\Program.cs",
               "ToolTip": "D:\\WORKING\\siraj\\mis project\\source codes\\MIS Backend\\MIS Backend\\Program.cs",
               "RelativeToolTip": "MIS Backend\\Program.cs",
-              "ViewState": "AQIAABIAAAAAAAAAAIBZwEEAAAAYAAAA",
+              "ViewState": "AQIAACoAAAAAAAAAAAAAADYAAAAaAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-04T12:18:02.988Z"
+              "WhenOpened": "2024-09-04T12:18:02.988Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "D:\\WORKING\\siraj\\mis project\\source codes\\MIS Backend\\MIS Backend\\Data\\AppDbContext.cs",
               "RelativeDocumentMoniker": "MIS Backend\\Data\\AppDbContext.cs",
@@ -237,19 +237,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\WORKING\\siraj\\mis project\\source codes\\MIS Backend\\MIS Backend\\appsettings.json",
               "RelativeDocumentMoniker": "MIS Backend\\appsettings.json",
               "ToolTip": "D:\\WORKING\\siraj\\mis project\\source codes\\MIS Backend\\MIS Backend\\appsettings.json",
               "RelativeToolTip": "MIS Backend\\appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAA2AAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAKAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-09-04T12:01:57.467Z"
+              "WhenOpened": "2024-09-04T12:01:57.467Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "MIS Backend.csproj",
               "DocumentMoniker": "D:\\WORKING\\siraj\\mis project\\source codes\\MIS Backend\\MIS Backend\\MIS Backend.csproj",
               "RelativeDocumentMoniker": "MIS Backend\\MIS Backend.csproj",
@@ -257,7 +258,8 @@
               "RelativeToolTip": "MIS Backend\\MIS Backend.csproj",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAABRAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-09-04T11:59:28.818Z"
+              "WhenOpened": "2024-09-04T11:59:28.818Z",
+              "EditorCaption": ""
             }
           ]
         }

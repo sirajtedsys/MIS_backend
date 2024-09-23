@@ -746,5 +746,54 @@ namespace MIS_Backend.Controllers
 
         }
 
+        //15
+
+        [HttpGet("CallReferalReportProcedureAsync")]
+        public async Task<dynamic> CallReferalReportProcedureAsync(string fromd, string tod)
+        {
+            try
+            {
+                // Retrieve token from Authorization header
+                string authorizationHeader = Request.Headers["Authorization"];
+
+                if (string.IsNullOrEmpty(authorizationHeader))
+                {
+                    return Unauthorized();
+                }
+
+                // Extract token from header (remove "Bearer " prefix)
+                string token = authorizationHeader.Replace("Bearer ", "");
+
+                // Decode token (not decrypt, assuming DecriptTocken is for decoding)
+                UserTocken decodedToken = jwtHandler.DecriptTocken(authorizationHeader);
+
+                if (decodedToken == null)
+                {
+                    return Unauthorized();
+                }
+
+                // Validate token
+                var isValid = await jwtHandler.ValidateToken(token);
+
+                if (isValid)
+                {
+                    // Return user details or appropriate response
+                    //return Ok(new { Message = "CallCollectionProcedureAsync details retrieved successfully", UserDetails = decodedToken });
+                    return await comrep.CallReferalReportProcedureAsync(fromd, tod);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error in CallReferalReportProcedureAsync: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+
+        }
+
     }
 }

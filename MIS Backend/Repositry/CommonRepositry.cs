@@ -861,15 +861,15 @@ namespace MIS_Backend.Repositry
             try
             {
                 // Define the SQL statement to call the stored procedure
-                var sql = "BEGIN UCHTRANS.SP_DS_PROCEDURE(:FROMDATE, :TODATE, :STROUT); END;";
+                var sql = "BEGIN UCHTRANS.SP_DS_PROCEDURE(:DATE_FROM, :DATE_TO, :STROUT); END;";
 
                 // Format the dates to match Oracle's expected format (e.g., DD-MM-YY)
-                string formattedFromDate = DateTime.Parse(fromDate).ToString("dd-MM-yyyy");
-                string formattedToDate = DateTime.Parse(toDate).ToString("dd-MM-yyyy");
+                string formattedFromDate = DateTime.Parse(fromDate).ToString("dd-MM-yy");
+                string formattedToDate = DateTime.Parse(toDate).ToString("dd-MM-yy");
 
                 // Define the parameters
-                var fromDateParam = new OracleParameter("FROMDATE", OracleDbType.Varchar2) { Value = formattedFromDate };
-                var toDateParam = new OracleParameter("TODATE", OracleDbType.Varchar2) { Value = formattedToDate };
+                var dateFromParam = new OracleParameter("DATE_FROM", OracleDbType.Varchar2) { Value = formattedFromDate };
+                var dateToParam = new OracleParameter("DATE_TO", OracleDbType.Varchar2) { Value = formattedToDate };
                 var strOutParam = new OracleParameter("STROUT", OracleDbType.RefCursor) { Direction = ParameterDirection.Output };
 
                 // Execute the stored procedure
@@ -879,8 +879,8 @@ namespace MIS_Backend.Repositry
                     cmd.CommandType = System.Data.CommandType.Text;
 
                     // Add parameters to the command
-                    cmd.Parameters.Add(fromDateParam);
-                    cmd.Parameters.Add(toDateParam);
+                    cmd.Parameters.Add(dateFromParam);
+                    cmd.Parameters.Add(dateToParam);
                     cmd.Parameters.Add(strOutParam);
 
                     await _DbContext.Database.GetDbConnection().OpenAsync();
@@ -893,9 +893,10 @@ namespace MIS_Backend.Repositry
                         {
                             var result = new
                             {
-                                PRC_ID = reader["PRC_ID"],
-                                PRC_NAME = reader["PRC_NAME"],
-                                NETAMOUNT = reader["NETAMOUNT"]
+                                PRC_ID = reader["PRC_ID"].ToString(),
+                                PRC_NAME = reader["PRC_NAME"].ToString(),
+                                NetAmount = Convert.ToDecimal(reader["NETAMOUNT"]),
+                                ProcedureCount = Convert.ToInt32(reader["PROC_CNT"])
                             };
 
                             results.Add(result);
@@ -1017,6 +1018,67 @@ namespace MIS_Backend.Repositry
                             {
                                 Section = reader["SECTION"].ToString(),
                                 PackageAmount = Convert.ToDecimal(reader["PKG_AMT"])
+                            };
+
+                            results.Add(result);
+                        }
+
+                        return results;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var msg1 = new DefaultMessage.Message1
+                {
+                    Status = 500,
+                    Message = ex.Message
+                };
+                return msg1;
+            }
+        }
+
+
+        //SP_DS_REFERAL_REPORT  15
+        public async Task<dynamic> CallReferalReportProcedureAsync(string fromDate, string toDate)
+        {
+            try
+            {
+                // Define the SQL statement to call the stored procedure
+                var sql = "BEGIN UCHTRANS.SP_DS_REFERAL_REPORT(:DATE_FROM, :DATE_TO, :STROUT); END;";
+
+                // Format the dates to match Oracle's expected format (e.g., DD/MM/YYYY)
+                string formattedFromDate = DateTime.Parse(fromDate).ToString("dd/MM/yyyy");
+                string formattedToDate = DateTime.Parse(toDate).ToString("dd/MM/yyyy");
+
+                // Define the parameters
+                var dateFromParam = new OracleParameter("DATE_FROM", OracleDbType.Varchar2) { Value = formattedFromDate };
+                var dateToParam = new OracleParameter("DATE_TO", OracleDbType.Varchar2) { Value = formattedToDate };
+                var strOutParam = new OracleParameter("STROUT", OracleDbType.RefCursor) { Direction = ParameterDirection.Output };
+
+                // Execute the stored procedure
+                using (var cmd = _DbContext.Database.GetDbConnection().CreateCommand())
+                {
+                    cmd.CommandText = sql;
+                    cmd.CommandType = System.Data.CommandType.Text;
+
+                    // Add parameters to the command
+                    cmd.Parameters.Add(dateFromParam);
+                    cmd.Parameters.Add(dateToParam);
+                    cmd.Parameters.Add(strOutParam);
+
+                    await _DbContext.Database.GetDbConnection().OpenAsync();
+
+                    using (var reader = (OracleDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        var results = new List<dynamic>();
+
+                        while (await reader.ReadAsync())
+                        {
+                            var result = new
+                            {
+                                ReferredBy = reader["REFERED_BY"].ToString(),
+                                NetAmount = Convert.ToDecimal(reader["NET_AMT"])
                             };
 
                             results.Add(result);

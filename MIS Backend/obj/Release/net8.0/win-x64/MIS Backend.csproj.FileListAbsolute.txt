@@ -51,3 +51,4 @@ D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Release\ne
 D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Release\net8.0\win-x64\MIS Backend.pdb
 D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Release\net8.0\win-x64\MIS Backend.genruntimeconfig.cache
 D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Release\net8.0\win-x64\ref\MIS Backend.dll
+D:\WORKING\siraj\mis project\source codes\MIS Backend\MIS Backend\obj\Release\net8.0\win-x64\MIS Backend.sourcelink.json
