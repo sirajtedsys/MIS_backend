@@ -178,7 +178,7 @@
               "RelativeDocumentMoniker": "MIS Backend\\Repositry\\CommonRepositry.cs",
               "ToolTip": "D:\\WORKING\\siraj\\mis project\\source codes\\MIS Backend\\MIS Backend\\Repositry\\CommonRepositry.cs",
               "RelativeToolTip": "MIS Backend\\Repositry\\CommonRepositry.cs",
-              "ViewState": "AQIAAHkDAAAAAAAAAAAYwIIDAAAuAAAA",
+              "ViewState": "AQIAAKQCAAAAAAAAAAAMwHADAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-05T05:47:29.86Z",
               "EditorCaption": ""
@@ -191,7 +191,7 @@
               "RelativeDocumentMoniker": "MIS Backend\\Controllers\\CommonController.cs",
               "ToolTip": "D:\\WORKING\\siraj\\mis project\\source codes\\MIS Backend\\MIS Backend\\Controllers\\CommonController.cs",
               "RelativeToolTip": "MIS Backend\\Controllers\\CommonController.cs",
-              "ViewState": "AQIAAPsBAAAAAAAAAAAjwAICAAA8AAAA",
+              "ViewState": "AQIAAM0BAAAAAAAAAAAewNABAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-05T05:46:23.474Z",
               "EditorCaption": ""
@@ -219,8 +219,7 @@
               "RelativeToolTip": "MIS Backend\\Program.cs",
               "ViewState": "AQIAACoAAAAAAAAAAAAAADYAAAAaAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-04T12:18:02.988Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-04T12:18:02.988Z"
             },
             {
               "$type": "Document",
@@ -245,8 +244,7 @@
               "RelativeToolTip": "MIS Backend\\appsettings.json",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAKAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-09-04T12:01:57.467Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-04T12:01:57.467Z"
             },
             {
               "$type": "Document",
@@ -258,8 +256,7 @@
               "RelativeToolTip": "MIS Backend\\MIS Backend.csproj",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAABRAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-09-04T11:59:28.818Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-09-04T11:59:28.818Z"
             }
           ]
         }

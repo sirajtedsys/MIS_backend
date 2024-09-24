@@ -741,9 +741,9 @@ namespace MIS_Backend.Repositry
                 // Define the SQL statement to call the stored procedure
                 var sql = "BEGIN UCHTRANS.SP_DS_PROC_CATEGORY(:FROMDATE, :TODATE, :STROUT); END;";
 
-                // Format the dates to match Oracle's expected format (e.g., DD-MM-YY)
-                string formattedFromDate = DateTime.Parse(fromDate).ToString("dd-MM-yyyy");
-                string formattedToDate = DateTime.Parse(toDate).ToString("dd-MM-yyyy");
+                // Format the dates to match Oracle's expected format (e.g., DD/MM/YYYY)
+                string formattedFromDate = DateTime.Parse(fromDate).ToString("dd/MM/yyyy");
+                string formattedToDate = DateTime.Parse(toDate).ToString("dd/MM/yyyy");
 
                 // Define the parameters
                 var fromDateParam = new OracleParameter("FROMDATE", OracleDbType.Varchar2) { Value = formattedFromDate };
@@ -771,9 +771,14 @@ namespace MIS_Backend.Repositry
                         {
                             var result = new
                             {
-                                PRCCAT_ID = reader["PRCCAT_ID"],
-                                PRCCAT_NAME = reader["PRCCAT_NAME"],
-                                NETAMOUNT = reader["NETAMOUNT"]
+                                // Ensure proper handling for PRCCAT_ID
+                                PRCCAT_ID = reader["PRCCAT_ID"] != DBNull.Value ? reader["PRCCAT_ID"].ToString() : "N/A",
+                                PRCCAT_NAME = reader["PRCCAT_NAME"] != DBNull.Value ? reader["PRCCAT_NAME"].ToString() : "N/A",
+
+                                // Use Convert.ToDecimal safely
+                                GROSS = reader["GROSS"] != DBNull.Value ? Convert.ToDecimal(reader["GROSS"]) : 0.0m,
+                                DISCOUNT = reader["DISCOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["DISCOUNT"]) : 0.0m,
+                                NETAMOUNT = reader["NETAMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["NETAMOUNT"]) : 0.0m
                             };
 
                             results.Add(result);
@@ -782,6 +787,16 @@ namespace MIS_Backend.Repositry
                         return results;
                     }
                 }
+            }
+            catch (FormatException ex)
+            {
+                // Handle format exceptions specifically
+                var msg1 = new DefaultMessage.Message1
+                {
+                    Status = 400, // Bad Request for format issues
+                    Message = $"Format Error: {ex.Message}"
+                };
+                return msg1;
             }
             catch (Exception ex)
             {
@@ -802,9 +817,9 @@ namespace MIS_Backend.Repositry
                 // Define the SQL statement to call the stored procedure
                 var sql = "BEGIN UCHTRANS.SP_DS_PROC_GROUP(:FROMDATE, :TODATE, :STROUT); END;";
 
-                // Format the dates to match Oracle's expected format (e.g., DD-MM-YY)
-                string formattedFromDate = DateTime.Parse(fromDate).ToString("dd-MM-yyyy");
-                string formattedToDate = DateTime.Parse(toDate).ToString("dd-MM-yyyy");
+                // Format the dates to match Oracle's expected format (e.g., DD/MM/YY)
+                string formattedFromDate = DateTime.Parse(fromDate).ToString("dd/MM/yy");
+                string formattedToDate = DateTime.Parse(toDate).ToString("dd/MM/yy");
 
                 // Define the parameters
                 var fromDateParam = new OracleParameter("FROMDATE", OracleDbType.Varchar2) { Value = formattedFromDate };
@@ -830,11 +845,19 @@ namespace MIS_Backend.Repositry
 
                         while (await reader.ReadAsync())
                         {
+                            // Safely read values and handle potential nulls or format issues
                             var result = new
                             {
-                                PRC_GRP_ID = reader["PRC_GRP_ID"],
-                                PRC_GRP_NAME = reader["PRC_GRP_NAME"],
-                                NETAMOUNT = reader["NETAMOUNT"]
+                                ProcedureGroupId = reader["PRC_GRP_ID"] != DBNull.Value ?
+                                    (int.TryParse(reader["PRC_GRP_ID"].ToString(), out int id) ? id : 0) : 0, // Handle format issues
+                                ProcedureGroupName = reader["PRC_GRP_NAME"] != DBNull.Value ?
+                                    reader["PRC_GRP_NAME"].ToString() : "N/A",
+                                GrossAmount = reader["GROSS"] != DBNull.Value ?
+                                    Convert.ToDecimal(reader["GROSS"]) : 0.0m,
+                                Discount = reader["DISCOUNT"] != DBNull.Value ?
+                                    Convert.ToDecimal(reader["DISCOUNT"]) : 0.0m,
+                                NetAmount = reader["NETAMOUNT"] != DBNull.Value ?
+                                    Convert.ToDecimal(reader["NETAMOUNT"]) : 0.0m
                             };
 
                             results.Add(result);
@@ -854,6 +877,7 @@ namespace MIS_Backend.Repositry
                 return msg1;
             }
         }
+
 
         //SP_DS_PROCEDURE  6
         public async Task<dynamic> DsProcedureProcedureAsync(string fromDate, string toDate)
@@ -977,7 +1001,6 @@ namespace MIS_Backend.Repositry
                 return msg1;
             }
         }
-
         //SP_DS_PACKAGE  11
         public async Task<dynamic> CallPackageProcedureAsync(string fromDate, string toDate)
         {
@@ -1047,9 +1070,9 @@ namespace MIS_Backend.Repositry
                 // Define the SQL statement to call the stored procedure
                 var sql = "BEGIN UCHTRANS.SP_DS_REFERAL_REPORT(:DATE_FROM, :DATE_TO, :STROUT); END;";
 
-                // Format the dates to match Oracle's expected format (e.g., DD/MM/YYYY)
-                string formattedFromDate = DateTime.Parse(fromDate).ToString("dd/MM/yyyy");
-                string formattedToDate = DateTime.Parse(toDate).ToString("dd/MM/yyyy");
+                // Format the dates to match Oracle's expected format (e.g., DD/MM/YY)
+                string formattedFromDate = DateTime.Parse(fromDate).ToString("dd/MM/yy");
+                string formattedToDate = DateTime.Parse(toDate).ToString("dd/MM/yy");
 
                 // Define the parameters
                 var dateFromParam = new OracleParameter("DATE_FROM", OracleDbType.Varchar2) { Value = formattedFromDate };
@@ -1078,7 +1101,9 @@ namespace MIS_Backend.Repositry
                             var result = new
                             {
                                 ReferredBy = reader["REFERED_BY"].ToString(),
-                                NetAmount = Convert.ToDecimal(reader["NET_AMT"])
+                                NetAmount = Convert.ToDecimal(reader["NET_AMT"]),
+                                GrossAmount = Convert.ToDecimal(reader["GROSS"]),
+                                Discount = Convert.ToDecimal(reader["DISCOUNT"])
                             };
 
                             results.Add(result);
