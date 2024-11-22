@@ -6,7 +6,7 @@ namespace MIS_Backend.Data.DbModel
     {
         [Key]
         public int ID { get; set; }
-        public int USERID { get; set; }
+        public string USERID { get; set; }
         public string TOKEN { get; set; }
         public DateTime GENERATEDATE { get; set; }
 

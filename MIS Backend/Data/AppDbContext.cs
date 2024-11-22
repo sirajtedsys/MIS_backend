@@ -52,6 +52,9 @@ namespace MIS_Backend.Class
             modelBuilder.Entity<Tbl_Hrm_Department>().ToTable("HRM_DEPARTMENT", schema: "UCHMASTER");
             modelBuilder.Entity<UCHMASTER_Hrm_Branch>().ToTable("HRM_BRANCH", schema: "UCHMASTER");
             modelBuilder.Entity<UCHMASTER_LoginSettings>().ToTable("LOGIN_SETTINGS", schema: "UCHMASTER");
+            modelBuilder.Entity<UCHMASTER_Hrm_Employee>().ToTable("HRM_EMPLOYEE", schema: "UCHMASTER");
+            modelBuilder.Entity<UCHMASTER_Hrm_employee_branch_Link>().ToTable("HRM_EMPLOYEE_BRANCH_LINK", schema: "UCHMASTER");
+            modelBuilder.Entity<UCHMASTER_Hrm_Employee_Hr>().ToTable("HRM_EMPLOYEE_HR", schema: "UCHMASTER");
 
             #endregion UCHMASTER
 
@@ -70,6 +73,9 @@ namespace MIS_Backend.Class
         public DbSet<UCHMASTER_Hrm_Branch> HRM_BRANCH { get; set; }
         public DbSet<Tbl_Hrm_Department> HRM_DEPARTMENT { get; set; }
         public DbSet<UCHMASTER_LoginSettings> LOGIN_SETTINGS { get; set; }
+        public DbSet<UCHMASTER_Hrm_Employee>HRM_EMPLOYEE { get; set; }
+        public DbSet<UCHMASTER_Hrm_employee_branch_Link> HRM_EMPLOYEE_BRANCH_LINK { get; set; }
+        public DbSet<UCHMASTER_Hrm_Employee_Hr> HRM_EMPLOYEE_HR { get; set; }
 
         #endregion UCHMASTER
 

@@ -35,7 +35,7 @@ public class JwtService
     public class UserTocken
     {
         [Key]
-        public int AUSR_ID { get; set; }
+        public string AUSR_ID { get; set; }
         public string USERNAME { get; set; }
 
         public string PASSWORD { get; set; }
@@ -96,7 +96,7 @@ public class JwtService
             UserTocken usertoken = new UserTocken()
             {
 
-                AUSR_ID = Convert.ToInt32(token.Claims.First(x => x.Type == "AuserId")?.Value),
+                AUSR_ID = token.Claims.First(x => x.Type == "AuserId")?.Value,
                 USERNAME = token.Claims.First(x => x.Type == "Username")?.Value,
                 PASSWORD = token.Claims.First(x => x.Type == "Password")?.Value
             };

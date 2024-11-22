@@ -84,6 +84,56 @@ namespace MIS_Backend.Controllers
         }
 
 
+        //userwanted and allowed repotrs
+        [HttpGet("GetAppMenuAsync")]
+        public async Task<dynamic> GetAppMenuAsync()
+        {
+            try
+            {
+                // Retrieve token from Authorization header
+                string authorizationHeader = Request.Headers["Authorization"];
+
+                if (string.IsNullOrEmpty(authorizationHeader))
+                {
+                    return Unauthorized();
+                }
+
+                // Extract token from header (remove "Bearer " prefix)
+                string token = authorizationHeader.Replace("Bearer ", "");
+
+                // Decode token (not decrypt, assuming DecriptTocken is for decoding)
+                UserTocken decodedToken = jwtHandler.DecriptTocken(authorizationHeader);
+
+                if (decodedToken == null)
+                {
+                    return Unauthorized();
+                }
+
+                // Validate token
+                var isValid = await jwtHandler.ValidateToken(token);
+
+                if (isValid)
+                {
+                    // Return user details or appropriate response
+                    //return Ok(new { Message = "User details retrieved successfully", UserDetails = decodedToken });
+                    return await comrep.GetAppMenuAsync(decodedToken.AUSR_ID);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error in GetAppMenuAsync: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+
+        }
+
+
+
         [HttpGet("CallPurchaseOrderProcedureAsync")]
         public async Task<dynamic> CallPurchaseOrderProcedureAsync(string fromd, string tod)
         {
@@ -795,5 +845,199 @@ namespace MIS_Backend.Controllers
 
         }
 
+
+        [HttpGet("GetBillDiscountsAsync")]
+        public async Task<dynamic> GetBillDiscountsAsync(string fromd, string tod)
+        {
+            try
+            {
+                // Retrieve token from Authorization header
+                string authorizationHeader = Request.Headers["Authorization"];
+
+                if (string.IsNullOrEmpty(authorizationHeader))
+                {
+                    return Unauthorized();
+                }
+
+                // Extract token from header (remove "Bearer " prefix)
+                string token = authorizationHeader.Replace("Bearer ", "");
+
+                // Decode token (not decrypt, assuming DecriptTocken is for decoding)
+                UserTocken decodedToken = jwtHandler.DecriptTocken(authorizationHeader);
+
+                if (decodedToken == null)
+                {
+                    return Unauthorized();
+                }
+
+                // Validate token
+                var isValid = await jwtHandler.ValidateToken(token);
+
+                if (isValid)
+                {
+                    // Return user details or appropriate response
+                    //return Ok(new { Message = "CallCollectionProcedureAsync details retrieved successfully", UserDetails = decodedToken });
+                    return await comrep.GetBillDiscountsAsync(fromd, tod);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error in GetBillDiscountsAsync: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+
+        }
+
+        
+
+        [HttpGet("GetLabDiscountApprovalsAsync")]
+        public async Task<dynamic> GetLabDiscountApprovalsAsync(string fromd, string tod)
+        {
+            try
+            {
+                // Retrieve token from Authorization header
+                string authorizationHeader = Request.Headers["Authorization"];
+
+                if (string.IsNullOrEmpty(authorizationHeader))
+                {
+                    return Unauthorized();
+                }
+
+                // Extract token from header (remove "Bearer " prefix)
+                string token = authorizationHeader.Replace("Bearer ", "");
+
+                // Decode token (not decrypt, assuming DecriptTocken is for decoding)
+                UserTocken decodedToken = jwtHandler.DecriptTocken(authorizationHeader);
+
+                if (decodedToken == null)
+                {
+                    return Unauthorized();
+                }
+
+                // Validate token
+                var isValid = await jwtHandler.ValidateToken(token);
+
+                if (isValid)
+                {
+                    // Return user details or appropriate response
+                    //return Ok(new { Message = "CallCollectionProcedureAsync details retrieved successfully", UserDetails = decodedToken });
+                    return await comrep.GetLabDiscountApprovalsAsync(fromd, tod);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error in GetLabDiscountApprovalsAsync: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+
+        }
+
+
+        //
+        // Approve Discounts
+        [HttpPost("UpdateOpDiscountAppAsync")]
+        public async Task<IActionResult> UpdateOpDiscountAppAsync(List<DiscountUpdateModel> requests)
+        {
+            try
+            {
+                // Retrieve token from Authorization header
+                string authorizationHeader = Request.Headers["Authorization"];
+                if (string.IsNullOrEmpty(authorizationHeader)) return Unauthorized();
+
+                // Extract token from header (remove "Bearer " prefix)
+                string token = authorizationHeader.Replace("Bearer ", "");
+
+                // Decode and validate token
+                UserTocken decodedToken = jwtHandler.DecriptTocken(authorizationHeader);
+                if (decodedToken == null) return Unauthorized();
+
+                var isValid = await jwtHandler.ValidateToken(token);
+                if (!isValid) return Unauthorized();
+
+                // Pass to repository for processing
+                var result = await comrep.UpdateOpDiscountAppAsync(requests, decodedToken);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in UpdateOpDiscountAppAsync: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // Reject Discounts
+        [HttpPost("RejectOPDiscountAsync")]
+        public async Task<IActionResult> RejectOPDiscountAsync(List<DiscountUpdateModel> requests)
+        {
+            try
+            {
+                // Retrieve token from Authorization header
+                string authorizationHeader = Request.Headers["Authorization"];
+                if (string.IsNullOrEmpty(authorizationHeader)) return Unauthorized();
+
+                // Extract token from header (remove "Bearer " prefix)
+                string token = authorizationHeader.Replace("Bearer ", "");
+
+                // Decode and validate token
+                UserTocken decodedToken = jwtHandler.DecriptTocken(authorizationHeader);
+                if (decodedToken == null) return Unauthorized();
+
+                var isValid = await jwtHandler.ValidateToken(token);
+                if (!isValid) return Unauthorized();
+
+                // Pass to repository for processing
+                var result = await comrep.RejectOPDiscountAsync(requests, decodedToken);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in RejectOPDiscountAsync: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        // Update LBM Request
+        [HttpPost("UpdateLbmRequestAsync")]
+        public async Task<IActionResult> UpdateLbmRequestAsync(List<DiscountUpdateModel> requests)
+        {
+            try
+            {
+                // Retrieve token from Authorization header
+                string authorizationHeader = Request.Headers["Authorization"];
+                if (string.IsNullOrEmpty(authorizationHeader)) return Unauthorized();
+
+                // Extract token from header (remove "Bearer " prefix)
+                string token = authorizationHeader.Replace("Bearer ", "");
+
+                // Decode and validate token
+                UserTocken decodedToken = jwtHandler.DecriptTocken(authorizationHeader);
+                if (decodedToken == null) return Unauthorized();
+
+                var isValid = await jwtHandler.ValidateToken(token);
+                if (!isValid) return Unauthorized();
+
+                // Pass to repository for processing
+                var result = await comrep.UpdateLbmRequestsAsync(requests, decodedToken);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in UpdateLbmRequestAsync: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
+
+
 }
+

@@ -8,7 +8,7 @@ using System.Dynamic;
 using static JwtService;
 
 namespace MIS_Backend.Repositry
-{
+{ 
     public class CommonRepositry
     {
         private readonly AppDbContext _DbContext;
@@ -25,11 +25,25 @@ namespace MIS_Backend.Repositry
         {
             try
             {
-                var data = await _DbContext.EMR_ADMIN_USERS
-                    .Where(x => x.AUSR_USERNAME == username
-                    && x.AUSR_PWD == password
-                    && x.AUSR_STATUS != "D")
-                    .ToListAsync();
+                //var data = await _DbContext.EMR_ADMIN_USERS
+                //    .Where(x => x.AUSR_USERNAME == username
+                //    && x.AUSR_PWD == password
+                //    && x.AUSR_STATUS != "D")
+                //    .ToListAsync();
+                var data = await _DbContext.HRM_EMPLOYEE
+                   .Where(e => e.EMP_ACTIVE_STATUS == 'A' &&
+                               e.EMP_LOGIN_NAME == username &&
+                               e.EMP_PASSWORD == password)
+                   .Select(e => new
+                   {
+                       e.EMP_ID,
+                       e.EMP_OFFL_NAME,
+                       e.EMP_LOGIN_NAME,
+                       e.EMP_PASSWORD
+                   })
+                   .ToListAsync();
+
+                //return data/*;*/
 
                 //return userdata;
 
@@ -40,19 +54,19 @@ namespace MIS_Backend.Repositry
 
 
 
-                if (data != null)
+                if (data != null && data.Count>0)
                 {
                     var userdat = new UserTocken
                     {
-                        AUSR_ID = data[0].AUSR_ID,
-                        USERNAME = data[0].AUSR_USERNAME,
-                        PASSWORD = data[0].AUSR_PWD
+                        AUSR_ID = data[0].EMP_ID,
+                        USERNAME = data[0].EMP_LOGIN_NAME,
+                        PASSWORD = data[0].EMP_PASSWORD
                     };
 
                     var token = jwthand.GenerateToken(userdat);
 
                     //check exiting userdetail in loginsettings
-                    var dat = await _DbContext.LOGIN_SETTINGS.Where(x => x.USERID == data[0].AUSR_ID).ToListAsync();
+                    var dat = await _DbContext.LOGIN_SETTINGS.Where(x => x.USERID == data[0].EMP_ID).ToListAsync();
                     var existingDATA = new UCHMASTER_LoginSettings();
 
                     if (dat.Count > 0)
@@ -128,21 +142,34 @@ namespace MIS_Backend.Repositry
             try
             {
 
-                var result =
-                    from b in _DbContext.HRM_BRANCH
-                    join bl in _DbContext.EMR_ADMIN_USERS_BRANCH_LINK
-                        on b.BRANCH_ID equals bl.BRANCH_ID
-                    join usr in _DbContext.EMR_ADMIN_USERS
-                        on bl.AUSR_ID equals usr.AUSR_ID
-                    where b.ACTIVE_STATUS == "A"
-                          && usr.AUSR_USERNAME == ut.USERNAME
-                          && usr.AUSR_PWD == ut.PASSWORD
-                    orderby b.BRANCH_ID
-                    select new
-                    {
-                        b.BRANCH_ID,
-                        b.BRCH_NAME
-                    };
+                //var result =
+                //    from b in _DbContext.HRM_BRANCH
+                //    join bl in _DbContext.EMR_ADMIN_USERS_BRANCH_LINK
+                //        on b.BRANCH_ID equals bl.BRANCH_ID
+                //    join usr in _DbContext.EMR_ADMIN_USERS
+                //        on bl.AUSR_ID equals usr.AUSR_ID
+                //    where b.ACTIVE_STATUS == "A"
+                //          && usr.AUSR_USERNAME == ut.USERNAME
+                //          && usr.AUSR_PWD == ut.PASSWORD
+                //    orderby b.BRANCH_ID
+                //    select new
+                //    {
+                //        b.BRANCH_ID,
+                //        b.BRCH_NAME
+                //    };
+                var result = (from b in _DbContext.HRM_BRANCH
+                              join bl in _DbContext.HRM_EMPLOYEE_BRANCH_LINK on b.BRANCH_ID equals bl.BRANCH_ID
+                              join hr in _DbContext.HRM_EMPLOYEE_HR on bl.EMP_ID equals hr.EMP_ID
+                              join emp in _DbContext.HRM_EMPLOYEE on hr.EMP_ID equals emp.EMP_ID_HR
+                              where b.ACTIVE_STATUS  == "A"
+                                    && emp.EMP_LOGIN_NAME == ut.USERNAME
+                                    && emp.EMP_PASSWORD == ut.PASSWORD
+                              orderby b.BRANCH_ID
+                              select new
+                              {
+                                  b.BRANCH_ID,
+                                  b.BRCH_NAME
+                              }).ToList();
                 return result;
 
             }
@@ -157,6 +184,63 @@ namespace MIS_Backend.Repositry
 
             }
         }
+
+
+        //userwntedreports
+        public async Task<dynamic> GetAppMenuAsync(string userId)
+        {
+            try
+            {
+                // Define the SQL statement to call the stored procedure
+                var sql = "BEGIN UCHTRANS.SP_MIS_APP_MENU(:USER_ID, :STROUT); END;";
+
+                // Define the parameters
+                var userIdParam = new OracleParameter("USER_ID", OracleDbType.Varchar2) { Value = userId };
+                var strOutParam = new OracleParameter("STROUT", OracleDbType.RefCursor) { Direction = ParameterDirection.Output };
+
+                // Execute the stored procedure
+                using (var cmd = _DbContext.Database.GetDbConnection().CreateCommand())
+                {
+                    cmd.CommandText = sql;
+                    cmd.CommandType = System.Data.CommandType.Text;
+
+                    // Add parameters to the command
+                    cmd.Parameters.Add(userIdParam);
+                    cmd.Parameters.Add(strOutParam);
+
+                    await _DbContext.Database.GetDbConnection().OpenAsync();
+
+                    using (var reader = (OracleDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        var results = new List<dynamic>();
+
+                        while (await reader.ReadAsync())
+                        {
+                            var result = new
+                            {
+                                TabName = reader["TAB_NAME"] != DBNull.Value ? reader["TAB_NAME"].ToString() : null,
+                                Link = reader["LINK"] != DBNull.Value ? reader["LINK"].ToString() : null,
+                                Priority = reader["PRIORITY"] != DBNull.Value ? Convert.ToInt32(reader["PRIORITY"]) : (int?)null
+                            };
+
+                            results.Add(result);
+                        }
+
+                        return results;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var msg1 = new DefaultMessage.Message1
+                {
+                    Status = 500,
+                    Message = ex.Message
+                };
+                return msg1;
+            }
+        }
+
 
 
         //sp_ds_purchase_order   10
@@ -885,15 +969,15 @@ namespace MIS_Backend.Repositry
             try
             {
                 // Define the SQL statement to call the stored procedure
-                var sql = "BEGIN UCHTRANS.SP_DS_PROCEDURE(:DATE_FROM, :DATE_TO, :STROUT); END;";
+                var sql = "BEGIN UCHTRANS.SP_DS_PROCEDURE(:P_FROM_DATE, :P_TO_DATE, :STROUT); END;";
 
-                // Format the dates to match Oracle's expected format (e.g., DD-MM-YY)
+                // Format the dates to match Oracle's expected format (e.g., DD/MM/YYYY)
                 string formattedFromDate = DateTime.Parse(fromDate).ToString("dd-MM-yy");
                 string formattedToDate = DateTime.Parse(toDate).ToString("dd-MM-yy");
 
                 // Define the parameters
-                var dateFromParam = new OracleParameter("DATE_FROM", OracleDbType.Varchar2) { Value = formattedFromDate };
-                var dateToParam = new OracleParameter("DATE_TO", OracleDbType.Varchar2) { Value = formattedToDate };
+                var fromDateParam = new OracleParameter("P_FROM_DATE", OracleDbType.Varchar2) { Value = formattedFromDate };
+                var toDateParam = new OracleParameter("P_TO_DATE", OracleDbType.Varchar2) { Value = formattedToDate };
                 var strOutParam = new OracleParameter("STROUT", OracleDbType.RefCursor) { Direction = ParameterDirection.Output };
 
                 // Execute the stored procedure
@@ -903,8 +987,8 @@ namespace MIS_Backend.Repositry
                     cmd.CommandType = System.Data.CommandType.Text;
 
                     // Add parameters to the command
-                    cmd.Parameters.Add(dateFromParam);
-                    cmd.Parameters.Add(dateToParam);
+                    cmd.Parameters.Add(fromDateParam);
+                    cmd.Parameters.Add(toDateParam);
                     cmd.Parameters.Add(strOutParam);
 
                     await _DbContext.Database.GetDbConnection().OpenAsync();
@@ -917,10 +1001,12 @@ namespace MIS_Backend.Repositry
                         {
                             var result = new
                             {
-                                PRC_ID = reader["PRC_ID"].ToString(),
-                                PRC_NAME = reader["PRC_NAME"].ToString(),
+                                PrcId = reader["PRC_ID"].ToString(),
+                                PrcName = reader["PRC_NAME"].ToString(),
+                                Gross = Convert.ToDecimal(reader["GROSS"]),
+                                Discount = Convert.ToDecimal(reader["DISCOUNT"]),
                                 NetAmount = Convert.ToDecimal(reader["NETAMOUNT"]),
-                                ProcedureCount = Convert.ToInt32(reader["PROC_CNT"])
+                                ProcCount = Convert.ToInt32(reader["PROC_CNT"]),
                             };
 
                             results.Add(result);
@@ -1126,6 +1212,589 @@ namespace MIS_Backend.Repositry
 
 
 
+        //discount request op
+        public async Task<dynamic> GetBillDiscountsAsync(string fromDate, string toDate, string strWhere = "")
+        {
+            try
+            {
+                // Ensure the dates are formatted as DD/MM/YY
+                var formattedFromDate = string.IsNullOrEmpty(fromDate) ? (object)DBNull.Value : DateTime.Parse(fromDate).ToString("dd/MM/yy");
+                var formattedToDate = string.IsNullOrEmpty(toDate) ? (object)DBNull.Value : DateTime.Parse(toDate).ToString("dd/MM/yy");
 
+                // Define the SQL to call the stored procedure
+                var sql = "BEGIN UCHTRANS.SP_OPN_RQST_BILL_DISCOUNT(:P_FROM_DATE, :P_TO_DATE, :P_STRWHERE, :STROUT); END;";
+
+                // Define Oracle parameters
+                var parameters = new[]
+                {
+                    new OracleParameter("P_FROM_DATE", OracleDbType.Varchar2) { Value = formattedFromDate },
+                    new OracleParameter("P_TO_DATE", OracleDbType.Varchar2) { Value = formattedToDate },
+                    new OracleParameter("P_STRWHERE", OracleDbType.Varchar2) { Value = string.IsNullOrEmpty(strWhere) ? (object)DBNull.Value : strWhere },
+                    new OracleParameter("STROUT", OracleDbType.RefCursor) { Direction = ParameterDirection.Output }
+                };
+
+                // Execute the stored procedure
+                using (var cmd = _DbContext.Database.GetDbConnection().CreateCommand())
+                {
+                    cmd.CommandText = sql;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.AddRange(parameters);
+
+                    await _DbContext.Database.GetDbConnection().OpenAsync();
+
+                    using (var reader = (OracleDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        var results = new List<dynamic>();
+
+                        while (await reader.ReadAsync())
+                        {
+                            var result = new
+                            {
+                                RequestId = reader["RQST_ID"] != DBNull.Value ? Convert.ToInt32(reader["RQST_ID"]) : (int?)null,
+                                OpVisitId = reader["OPVISIT_ID"] != DBNull.Value ? reader["OPVISIT_ID"].ToString() : null,
+                                PatientId = reader["PATI_ID"] != DBNull.Value ? reader["PATI_ID"].ToString() : null,
+                                DoctorId = reader["DOCT_ID"] != DBNull.Value ? reader["DOCT_ID"].ToString() : null,
+                                CustomerId = reader["CUST_ID"] != DBNull.Value ? reader["CUST_ID"].ToString() : null,
+                                CustomerName = reader["CUST_NAME"] != DBNull.Value ? reader["CUST_NAME"].ToString() : null,
+                                DiscountPercentage = reader["DISC_PER"] != DBNull.Value ? Convert.ToDecimal(reader["DISC_PER"]) : (decimal?)null,
+                                DiscountAmount = reader["DISC_AMT"] != DBNull.Value ? Convert.ToDecimal(reader["DISC_AMT"]) : (decimal?)null,
+                                Remarks = reader["REMARKS"] != DBNull.Value ? reader["REMARKS"].ToString() : null,
+                                RequestedBy = reader["RQSTD_BY"] != DBNull.Value ? reader["RQSTD_BY"].ToString() : null,
+                                RequestedOn = reader["RQSTD_ON"] != DBNull.Value ? Convert.ToDateTime(reader["RQSTD_ON"]) : (DateTime?)null,
+                                ApprovedBy = reader["APPRVD_BY"] != DBNull.Value ? reader["APPRVD_BY"].ToString() : null,
+                                ApprovedOn = reader["APPRVD_ON"] != DBNull.Value ? Convert.ToDateTime(reader["APPRVD_ON"]) : (DateTime?)null,
+                                RequestStatus = reader["REQUEST_STATUS"] != DBNull.Value ? reader["REQUEST_STATUS"].ToString() : null,
+                                ApprovalRemarks = reader["APRVL_REMARKS"] != DBNull.Value ? reader["APRVL_REMARKS"].ToString() : null,
+                                Doctor = reader["DOCTOR"] != DBNull.Value ? reader["DOCTOR"].ToString() : null,
+                                RequestedUser = reader["RQSTD_USER"] != DBNull.Value ? reader["RQSTD_USER"].ToString() : null,
+                                ApprovedUser = reader["APPRVD_USER"] != DBNull.Value ? reader["APPRVD_USER"].ToString() : null,
+                                Status = reader["STATUS"] != DBNull.Value ? reader["STATUS"].ToString() : null,
+                                PatientOpNo = reader["PATI_OPNO"] != DBNull.Value ? reader["PATI_OPNO"].ToString() : null,
+                                PatientName = reader["PATI_NAME"] != DBNull.Value ? reader["PATI_NAME"].ToString() : null,
+                                PatientGender = reader["PATI_GENDER"] != DBNull.Value ? reader["PATI_GENDER"].ToString() : null,
+                                PatientMobile = reader["PATI_MOBILE"] != DBNull.Value ? reader["PATI_MOBILE"].ToString() : null
+                            };
+
+                            results.Add(result);
+                        }
+
+                        return results;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var msg1 = new DefaultMessage.Message1
+                {
+                    Status = 500,
+                    Message = ex.Message
+                };
+                return msg1;
+            }
+        }
+
+
+        //discount request lab
+        public async Task<List<dynamic>> GetLabDiscountApprovalsAsync(string fromDate, string toDate, string type="D")
+        {
+            try
+            {
+                // Ensure the dates are formatted as DD/MM/YY
+                var formattedFromDate = string.IsNullOrEmpty(fromDate) ? (object)DBNull.Value : DateTime.Parse(fromDate).ToString("dd/MM/yy");
+                var formattedToDate = string.IsNullOrEmpty(toDate) ? (object)DBNull.Value : DateTime.Parse(toDate).ToString("dd/MM/yy");
+
+                // Define the SQL statement to call the stored procedure
+                var sql = "BEGIN UCHTRANS.SP_LBM_RQST_DISC_APRVL_new(:P_FROM_DATE, :P_TO_DATE, :P_TYPE, :STROUT); END;";
+
+                // Define Oracle parameters
+                var parameters = new[]
+                {
+                    new OracleParameter("P_FROM_DATE", OracleDbType.Varchar2) { Value = formattedFromDate },
+                    new OracleParameter("P_TO_DATE", OracleDbType.Varchar2) { Value = formattedToDate },
+                    new OracleParameter("P_TYPE", OracleDbType.Varchar2) { Value = string.IsNullOrEmpty(type) ? (object)DBNull.Value : type },
+                    new OracleParameter("STROUT", OracleDbType.RefCursor) { Direction = ParameterDirection.Output }
+                };
+
+                // Execute the stored procedure
+                using (var cmd = _DbContext.Database.GetDbConnection().CreateCommand())
+                {
+                    cmd.CommandText = sql;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.AddRange(parameters);
+
+                    await _DbContext.Database.GetDbConnection().OpenAsync();
+
+                    using (var reader = (OracleDataReader)await cmd.ExecuteReaderAsync())
+                    {
+                        var results = new List<dynamic>();
+
+                        while (await reader.ReadAsync())
+                        {
+                            var result = new
+                            {
+                                RequestId = reader["RQST_ID"] != DBNull.Value ? Convert.ToInt32(reader["RQST_ID"]) : (int?)null,
+                                PatientOpNo = reader["PATI_OPNO"]?.ToString(),
+                                PatientName = reader["PATIENT_NAME"]?.ToString(),
+                                ServiceName = reader["SERVICE_NAME"]?.ToString(),
+                                BillDate = reader["BILL_DATE"] != DBNull.Value ? Convert.ToDateTime(reader["BILL_DATE"]) : (DateTime?)null,
+                                BillNo = reader["BILL_NO"]?.ToString(),
+                                RequestedFor = reader["REQUESTED_FOR"]?.ToString(),
+                                LbmPlanSlNo = reader["LBM_PLAN_SLNO"] != DBNull.Value ? Convert.ToInt32(reader["LBM_PLAN_SLNO"]) : (int?)null,
+                                Quantity = reader["QUANTITY"] != DBNull.Value ? Convert.ToInt32(reader["QUANTITY"]) : (int?)null,
+                                ProcedureId = reader["PRC_ID"]?.ToString(),
+                                DiscountPercentage = reader["DISC_PER"] != DBNull.Value ? Convert.ToDecimal(reader["DISC_PER"]) : (decimal?)null,
+                                Remarks = reader["REMARKS"]?.ToString(),
+                                RequestedBy = reader["RQSTED_BY"]?.ToString(),
+                                RequestedOn = reader["RQSTD_ON"] != DBNull.Value ? Convert.ToDateTime(reader["RQSTD_ON"]) : (DateTime?)null,
+                                EmrDocId = reader["EMR_DOC_ID"]?.ToString(),
+                                TestName = reader["TEST_NAME"]?.ToString(),
+                                RequestStatus = reader["RQST_STATUS"]?.ToString(),
+                                Doctor = reader["DOCTOR"]?.ToString(),
+                                IdCardNo = reader["IDCARD_NO"]?.ToString(),
+                                ProcedureRate = reader["PRC_RATE"] != DBNull.Value ? Convert.ToDecimal(reader["PRC_RATE"]) : (decimal?)null,
+                                ApprovalRemarks = reader["APRVL_REMARKS"]?.ToString(),
+                                DiscountAmount = reader["DISC_AMT"] != DBNull.Value ? Convert.ToDecimal(reader["DISC_AMT"]) : (decimal?)null
+                            };
+
+                            results.Add(result);
+                        }
+
+                        return results;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception and return error information
+                return new List<dynamic>
+        {
+            new
+            {
+                Status = 500,
+                Message = ex.Message
+            }
+        };
+            }
+        }
+
+
+        //op discount approval
+        public async Task<dynamic> UpdateOpDiscountAppAsync(List<DiscountUpdateModel> requests, UserTocken ut)
+        {
+            try
+            {
+                if (requests == null || !requests.Any())
+                {
+                    return new { Status = 400, Message = "No requests provided" };
+                }
+
+                var query = @"
+        UPDATE UCHTRANS.OPN_RQST_BILL_DISCOUNT
+        SET DISC_AMT = :DiscountAmount, 
+            APRVL_REMARKS = :ApprovalRemarks, 
+            REQUEST_STATUS = 'A', 
+            APPRVD_ON = SYSDATE, 
+            DISC_PER = :DiscountPercentage, 
+            APPRVD_BY = :ApprovedBy
+        WHERE RQST_ID = :RequestId";
+
+                using (var connection = _DbContext.Database.GetDbConnection())
+                {
+                    await connection.OpenAsync();
+
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            foreach (var request in requests)
+                            {
+                                var parameters = new List<OracleParameter>
+                            {
+                                new OracleParameter("DiscountAmount", OracleDbType.Decimal) { Value = request.DiscountAmount },
+                                new OracleParameter("ApprovalRemarks", OracleDbType.Varchar2) { Value = request.Remarks },
+                                new OracleParameter("DiscountPercentage", OracleDbType.Decimal) { Value = request.DiscountPercentage },
+                                new OracleParameter("ApprovedBy", OracleDbType.Varchar2) { Value = ut.AUSR_ID },
+                                new OracleParameter("RequestId", OracleDbType.Int32) { Value = request.RequestId }
+                            };
+
+                                using (var command = connection.CreateCommand())
+                                {
+                                    command.CommandText = query;
+                                    command.CommandType = CommandType.Text;
+                                    command.Parameters.AddRange(parameters.ToArray());
+
+                                    await command.ExecuteNonQueryAsync();
+                                }
+                            }
+
+                            transaction.Commit();
+
+                            return new { Status = 200, Message = $"{requests.Count} requests successfully approved" };
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            return new { Status = 500, Message = $"Error approving discounts: {ex.Message}" };
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new { Status = 500, Message = $"Error: {ex.Message}" };
+            }
+        }
+
+        //op doiscount rejection
+        public async Task<dynamic> RejectOPDiscountAsync(List<DiscountUpdateModel> requests, UserTocken ut)
+        {
+            try
+            {
+                if (requests == null || !requests.Any())
+                {
+                    return new { Status = 400, Message = "No requests provided" };
+                }
+
+                var query = @"
+        UPDATE UCHTRANS.OPN_RQST_BILL_DISCOUNT
+        SET APRVL_REMARKS = :ApprovalRemarks,
+            REQUEST_STATUS = 'R',
+            APPRVD_ON = SYSDATE,
+            APPRVD_BY = :ApprovedBy
+        WHERE RQST_ID = :RequestId";
+
+                using (var connection = _DbContext.Database.GetDbConnection())
+                {
+                    await connection.OpenAsync();
+
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            foreach (var request in requests)
+                            {
+                                var parameters = new List<OracleParameter>
+                            {
+                                new OracleParameter("ApprovalRemarks", OracleDbType.Varchar2) { Value = request.Remarks },
+                                new OracleParameter("ApprovedBy", OracleDbType.Varchar2) { Value = ut.AUSR_ID },
+                                new OracleParameter("RequestId", OracleDbType.Int32) { Value = request.RequestId }
+                            };
+
+                                using (var command = connection.CreateCommand())
+                                {
+                                    command.CommandText = query;
+                                    command.CommandType = CommandType.Text;
+                                    command.Parameters.AddRange(parameters.ToArray());
+
+                                    await command.ExecuteNonQueryAsync();
+                                }
+                            }
+
+                            transaction.Commit();
+
+                            return new { Status = 200, Message = $"{requests.Count} requests successfully rejected" };
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            return new { Status = 500, Message = $"Error rejecting discounts: {ex.Message}" };
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new { Status = 500, Message = $"Error: {ex.Message}" };
+            }
+        }
+
+
+        //lab request approval
+        public async Task<dynamic> UpdateLbmRequestsAsync(List<DiscountUpdateModel> requests, UserTocken ut)
+        {
+            try
+            {
+                if (requests == null || !requests.Any())
+                {
+                    return new { Status = 400, Message = "No requests provided" };
+                }
+
+                var query = @"
+        UPDATE UCHTRANS.LBM_RQST_DISC_OR_CANCEL 
+        SET APPRVD_BY = :ApprovedBy,
+            APPRVD_ON = SYSDATE,
+            RQST_STATUS = :RequestStatus,
+            DISC_PER = :DiscountPercentage,
+            REMARKS = :Remarks,
+            DISC_AMT = :DiscountAmount
+        WHERE RQST_ID = :RequestId";
+
+                using (var connection = _DbContext.Database.GetDbConnection())
+                {
+                    await connection.OpenAsync();
+
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            foreach (var request in requests)
+                            {
+                                var parameters = new List<OracleParameter>
+                            {
+                                new OracleParameter("ApprovedBy", OracleDbType.Varchar2) { Value = ut.AUSR_ID },
+                                new OracleParameter("RequestStatus", OracleDbType.Varchar2) { Value = request.Status },
+                                new OracleParameter("DiscountPercentage", OracleDbType.Decimal) { Value = request.DiscountPercentage },
+                                new OracleParameter("Remarks", OracleDbType.Varchar2) { Value = request.Remarks },
+                                new OracleParameter("DiscountAmount", OracleDbType.Decimal) { Value = request.DiscountAmount },
+                                new OracleParameter("RequestId", OracleDbType.Int32) { Value = request.RequestId }
+                            };
+
+                                using (var command = connection.CreateCommand())
+                                {
+                                    command.CommandText = query;
+                                    command.CommandType = CommandType.Text;
+                                    command.Parameters.AddRange(parameters.ToArray());
+
+                                    await command.ExecuteNonQueryAsync();
+                                }
+                            }
+
+                            transaction.Commit();
+
+                            var st = requests[0].Status == "A" ? "Approved" : requests[0].Status == "R" ? "Rejected" : "";
+
+                            return new { Status = 200, Message = $"{requests.Count} requests successfully " +st };
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            return new { Status = 500, Message = $"Error processing requests: {ex.Message}" };
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return new { Status = 500, Message = $"Error: {ex.Message}" };
+            }
+        }
     }
+
+
+    ////op discount approval
+    //public async Task<dynamic> UpdateOpDiscountAppAsync(int requestId, decimal discountAmount, string remarks, decimal discountPercentage, UserTocken ut)
+    //{
+    //    try
+    //    {
+    //        // SQL query with placeholders for parameters
+    //        var query = @"
+    //UPDATE UCHTRANS.OPN_RQST_BILL_DISCOUNT
+    //SET DISC_AMT = :DiscountAmount, 
+    //    APRVL_REMARKS = :ApprovalRemarks, 
+    //    REQUEST_STATUS = 'A', 
+    //    APPRVD_ON = SYSDATE, 
+    //    DISC_PER = :DiscountPercentage, 
+    //    APPRVD_BY = :ApprovedBy
+    //WHERE RQST_ID = :RequestId";
+
+    //        // Define the parameters
+    //        var parameters = new List<OracleParameter>
+    //{
+    //    new OracleParameter("DiscountAmount", OracleDbType.Decimal) { Value = discountAmount },
+    //    new OracleParameter("ApprovalRemarks", OracleDbType.Varchar2) { Value = remarks },
+    //    new OracleParameter("DiscountPercentage", OracleDbType.Decimal) { Value = discountPercentage },
+    //    new OracleParameter("ApprovedBy", OracleDbType.Varchar2) { Value = ut.AUSR_ID },
+    //    new OracleParameter("RequestId", OracleDbType.Int32) { Value = requestId }
+    //};
+
+    //        // Execute the query
+    //        using (var connection = _DbContext.Database.GetDbConnection())
+    //        {
+    //            await connection.OpenAsync();
+
+    //            using (var command = connection.CreateCommand())
+    //            {
+    //                command.CommandText = query;
+    //                command.CommandType = CommandType.Text;
+    //                command.Parameters.AddRange(parameters.ToArray());
+
+    //                var rowsAffected = await command.ExecuteNonQueryAsync();
+    //                if (rowsAffected > 0)
+    //                {
+    //                    return new
+    //                    {
+    //                        Status = 200,
+    //                        Message = "Successfully approved"
+    //                    };
+    //                }
+    //            }
+    //        }
+
+    //        // If no rows were updated, return an error
+    //        return new
+    //        {
+    //            Status = 500,
+    //            Message = "Failed to approve discount"
+    //        };
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return new
+    //        {
+    //            Status = 500,
+    //            Message = ex.Message
+    //        };
+    //    }
+    //}
+
+
+    ////op discoutn rejection
+    //public async Task<dynamic> RejectOPDiscountAsync(int requestId, string approvalRemarks, UserTocken ut)
+    //{
+    //    try
+    //    {
+    //        // SQL query with placeholders for parameters
+    //        var query = @"
+    //UPDATE UCHTRANS.OPN_RQST_BILL_DISCOUNT
+    //SET APRVL_REMARKS = :ApprovalRemarks,
+    //    REQUEST_STATUS = 'R',
+    //    APPRVD_ON = SYSDATE,
+    //    APPRVD_BY = :ApprovedBy
+    //WHERE RQST_ID = :RequestId";
+
+    //        // Define the parameters
+    //        var parameters = new List<OracleParameter>
+    //{
+    //    new OracleParameter("ApprovalRemarks", OracleDbType.Varchar2) { Value = approvalRemarks },
+    //    new OracleParameter("ApprovedBy", OracleDbType.Varchar2) { Value = ut.AUSR_ID },
+    //    new OracleParameter("RequestId", OracleDbType.Int32) { Value = requestId }
+    //};
+
+    //        // Execute the query
+    //        using (var connection = _DbContext.Database.GetDbConnection())
+    //        {
+    //            await connection.OpenAsync();
+
+    //            using (var command = connection.CreateCommand())
+    //            {
+    //                command.CommandText = query;
+    //                command.CommandType = CommandType.Text;
+    //                command.Parameters.AddRange(parameters.ToArray());
+
+    //                var rowsAffected = await command.ExecuteNonQueryAsync();
+    //                if (rowsAffected > 0)
+    //                {
+    //                    return new
+    //                    {
+    //                        Status = 200,
+    //                        Message = "Successfully rejected"
+    //                    };
+    //                }
+    //            }
+    //        }
+
+    //        // If no rows were updated, return an error
+    //        return new
+    //        {
+    //            Status = 500,
+    //            Message = "Failed to reject discount"
+    //        };
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return new
+    //        {
+    //            Status = 500,
+    //            Message = ex.Message
+    //        };
+    //    }
+    //}
+
+    ////procedure bill update
+
+    //public async Task<dynamic> UpdateLbmRequestAsync(int requestId, string status, decimal discountPercentage, string remarks, decimal discountAmount, UserTocken ut)
+    //{
+    //    try
+    //    {
+    //        // SQL query with placeholders for parameters
+    //        var query = @"
+    //    UPDATE UCHTRANS.LBM_RQST_DISC_OR_CANCEL 
+    //    SET APPRVD_BY = :ApprovedBy,
+    //        APPRVD_ON = SYSDATE,
+    //        RQST_STATUS = :RequestStatus,
+    //        DISC_PER = :DiscountPercentage,
+    //        REMARKS = :Remarks,
+    //        DISC_AMT = :DiscountAmount
+    //    WHERE RQST_ID = :RequestId";
+
+    //        // Define the parameters
+    //        var parameters = new List<OracleParameter>
+    //{
+    //    new OracleParameter("ApprovedBy", OracleDbType.Varchar2) { Value = ut.AUSR_ID },
+    //    new OracleParameter("RequestStatus", OracleDbType.Varchar2) { Value = status },
+    //    new OracleParameter("DiscountPercentage", OracleDbType.Decimal) { Value = discountPercentage },
+    //    new OracleParameter("Remarks", OracleDbType.Varchar2) { Value = remarks },
+    //    new OracleParameter("DiscountAmount", OracleDbType.Decimal) { Value = discountAmount },
+    //    new OracleParameter("RequestId", OracleDbType.Int32) { Value = requestId }
+    //};
+
+    //        // Execute the query
+    //        using (var connection = _DbContext.Database.GetDbConnection())
+    //        {
+    //            await connection.OpenAsync();
+
+    //            using (var command = connection.CreateCommand())
+    //            {
+    //                command.CommandText = query;
+    //                command.CommandType = CommandType.Text;
+    //                command.Parameters.AddRange(parameters.ToArray());
+
+    //                var rowsAffected = await command.ExecuteNonQueryAsync();
+
+    //                // Return success response if rows were updated
+    //                if (rowsAffected > 0)
+    //                {
+    //                    if(status=="A")
+    //                    {
+    //                        return new
+    //                        {
+    //                            Status = 200,
+    //                            Message = "successfully Approved"
+    //                        };
+    //                    }
+    //                    else
+    //                    {
+    //                        return new
+    //                        {
+    //                            Status = 200,
+    //                            Message = "Rejected successfully"
+    //                        };
+    //                    }
+
+    //                }
+    //            }
+    //        }
+
+    //        // Return failure response if no rows were updated
+    //        return new
+    //        {
+    //            Status = 500,
+    //            Message = "No rows updated"
+    //        };
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        // Return error response
+    //        return new
+    //        {
+    //            Status = 500,
+    //            Message = $"An error occurred: {ex.Message}"
+    //        };
+    //    }
+    //}
+
+
+
+
+
 }
